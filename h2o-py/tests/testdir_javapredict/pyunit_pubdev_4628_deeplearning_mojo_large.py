@@ -58,8 +58,16 @@ def deeplearning_mojo():
     train = df[NTESTROWS:, :]
     test = df[:NTESTROWS, :]
     print(params)
-    pyunit_utils.javapredict("deeplearning", prob, train, test, list(set(df.names) - {"response"}),
+    try:
+        pyunit_utils.javapredict("deeplearning", prob, train, test, list(set(df.names) - {"response"}),
                               "response", pojo_model=False, save_model=False, **params) # want to build mojo
+    except Exception as ex:
+        if type(ex.args[0]==type("what")):
+            if "unstable model" not in ex.args[0]:
+                print(ex)
+                sys.exit(1)     # okay to encounter unstable model not nothingh else
+            else:
+                print("An unstable model is found and no mojo is built.")
 
 # generate random neural network architecture
 def random_networkSize(actFunc):
