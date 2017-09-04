@@ -164,7 +164,7 @@ def javapredict(algo, equality, train, test, x, y, compile_only=False, separator
     elif algo == "kmeans": model = H2OKMeansEstimator(**kwargs)
     elif algo == "pca": model = H2OPCA(**kwargs)
     else: raise ValueError
-    if algo == "kmeans" or algo == "pca": model.train(x=x, training_frame=train)
+    if algo == "kmeans" or algo == "pca" or (algo=="deeplearning" and kwargs['autoencoder']): model.train(x=x, training_frame=train)
     else: model.train(x=x, y=y, training_frame=train)
     print(model)
 

@@ -28,6 +28,7 @@ test.deeplearning.mojo <-
                                            F)[1]]
     toStandardize = allFactors[sample(1:length(allFactors), replace = F)[1]]
     useAllFactors = allFactors[sample(1:length(allFactors), replace = F)[1]]
+    enableAutoEncoder = allFactors[sample(1:length(allFactors), replace = F)[1]]
     
     if (problem == 'regression') {
       loss <- 'Automatic'
@@ -52,8 +53,10 @@ test.deeplearning.mojo <-
     params$categorical_encoding <- cateEn
     params$hidden <- nn_structure$hidden
     params$training_frame <- training_frame
-    params$y <- "response"
+    if (!params$autoencoder)
+      params$y <- "response"
     params$x <- allNames[-which(allNames=="response")]
+    params$autoencoder <- enableAutoEncoder
     
     if (length(nn_structure$hiddenDropouts) > 0) {
       params$input_dropout_ratio <- runif(1, 0, 0.1)

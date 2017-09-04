@@ -28,6 +28,7 @@ def deeplearning_mojo():
     actFunc = allAct[randint(0,len(allAct)-1)]
     missing_values = missingValues[randint(0, len(missingValues)-1)]
     cateEn = categoricalEncodings[randint(0, len(categoricalEncodings)-1)]
+    enableEncoder = allFactors[randint(0,len(allFactors)-1)]    # enable autoEncoder or not
 
 
     if (problem=='regression'):
@@ -45,14 +46,16 @@ def deeplearning_mojo():
                   'use_all_factor_levels': allFactors[randint(0, len(allFactors) - 1)],
                   'hidden_dropout_ratios': hidden_dropout_ratios,
                   'input_dropout_ratio': random.uniform(0, 0.5),
-                  'categorical_encoding':cateEn
+                  'categorical_encoding':cateEn,
+                  'autoencoder':enableEncoder
                   }
     else:
         params = {'loss': loss, 'hidden': hiddens, 'standardize': True,
                   'missing_values_handling': missing_values, 'activation': actFunc,
                   'use_all_factor_levels': allFactors[randint(0, len(allFactors) - 1)],
                   'input_dropout_ratio': random.uniform(0, 0.5),
-                  'categorical_encoding':cateEn
+                  'categorical_encoding':cateEn,
+                  'autoencoder':enableEncoder
                   }
     df = random_dataset(problem)       # generate random dataset
     train = df[NTESTROWS:, :]
@@ -64,6 +67,7 @@ def deeplearning_mojo():
     except Exception as ex:
         if type(ex.args[0]==type("what")):
             if "unstable model" not in ex.args[0]:
+                print(params)
                 print(ex)
                 sys.exit(1)     # okay to encounter unstable model not nothingh else
             else:
